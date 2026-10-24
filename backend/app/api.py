@@ -21,6 +21,7 @@ from app.config import (
     INCONCLUSIVE_MARGIN,
     MAX_UPLOAD_BYTES,
     MODEL_PATH,
+    PRIVATE_REPORTS_ENABLED,
     RESULTS_FILE,
     SCREENING_LABELS_VALIDATED,
     UI_DIR,
@@ -161,6 +162,7 @@ def app_status() -> dict[str, object]:
         "status": "ready" if detector is not None else "demo",
         "model_id": detector.model_id if detector is not None else None,
         "screening_labels_validated": SCREENING_LABELS_VALIDATED,
+        "private_reports_enabled": PRIVATE_REPORTS_ENABLED,
         "message": (
             (
                 "The local model is connected, but its screening labels have not been validated for your recordings."
@@ -217,6 +219,9 @@ async def submit_cyber_fraud_report(
     consent_to_store: bool = Form(False),
     evidence: UploadFile | None = File(None),
 ) -> dict[str, object]:
+    if not PRIVATE_REPORTS_ENABLED:
+        raise HTTPException(status_code=503, detail="Private report intake is disabled on this public deployment.")
+
     evidence_bytes: bytes | None = None
     evidence_mime: str | None = None
     evidence_suffix: str | None = None
@@ -291,6 +296,9 @@ async def submit_cyber_fraud_report(
 
 @app.post("/api/cyber-fraud/reports/history")
 def private_report_history(request: ReportAccessRequest, response: Response) -> dict[str, object]:
+    if not PRIVATE_REPORTS_ENABLED:
+        raise HTTPException(status_code=503, detail="Private report lookup is disabled on this public deployment.")
+
     response.headers["Cache-Control"] = "no-store, private"
     try:
         report = lookup_private_report(request.reference, request.access_key)

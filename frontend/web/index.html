@@ -346,14 +346,18 @@
 
       <section class="app-view" id="report-view" aria-labelledby="report-title" hidden>
         <div class="page-heading">
-          <p class="eyebrow">PRIVATE IN-APP REPORT</p>
+          <p class="eyebrow">CYBER FRAUD SUPPORT</p>
           <h1 id="report-title">Report Cyber Fraud</h1>
-          <p class="intro-copy">Record what happened and keep a local reference. This does not file an official police or government complaint.</p>
+          <p class="intro-copy">Find official reporting services for your country. This page does not submit a complaint to an authority.</p>
         </div>
-        <section class="report-notice" aria-labelledby="report-privacy-title">
+        <section id="report-privacy-notice" class="report-notice" aria-labelledby="report-privacy-title" hidden>
           <h2 id="report-privacy-title">Before you continue</h2>
           <p>VoiceShield saves your report and optional evidence in a private local file on the computer running the backend. It is not sent to police, a government agency, or another service. After a successful save, you receive a one-time private access key. Keep it safe with your reference number: anyone with both can view the report status and details. The key is not recoverable. Anyone with access to the backend computer or its files may access stored reports; do not include passwords, verification codes, or unrelated sensitive information.</p>
           <p><strong>This is not an official complaint.</strong> Use the country-specific official service below to make a report to the appropriate authority.</p>
+        </section>
+        <section id="report-disabled-notice" class="report-notice" role="status" aria-live="polite">
+          <h2>Checking report intake availability</h2>
+          <p>Private report intake is not available until the server confirms it is enabled. You can still use the official reporting links below.</p>
         </section>
         <section class="report-official panel" aria-labelledby="official-report-title">
           <div class="report-country-row">
@@ -376,7 +380,7 @@
           <a id="official-report-link" class="report-official-link" href="https://cybercrime.gov.in/" target="_blank" rel="noopener noreferrer">Open official reporting service ↗</a>
           <p class="report-external-note">This link opens an external official site. VoiceShield does not transmit your in-app report there.</p>
         </section>
-        <section class="panel report-form-panel" aria-labelledby="report-form-title">
+        <section id="report-form-panel" class="panel report-form-panel" aria-labelledby="report-form-title" hidden>
           <h2 id="report-form-title">Incident details</h2>
           <p class="report-required-note">Fields marked required must be completed. Provide your name and at least one safe contact method so you can refer back to this in-app report.</p>
           <form id="cyber-report-form" novalidate>
@@ -514,7 +518,7 @@
             </section>
           </form>
         </section>
-        <section class="panel report-history-panel" aria-labelledby="report-history-title">
+        <section id="report-history-panel" class="panel report-history-panel" aria-labelledby="report-history-title" hidden>
           <h2 id="report-history-title">Check a private report</h2>
           <p>Enter the complaint reference and one-time private access key. The reference alone cannot open a report. Do not share the access key.</p>
           <p>Every report starts as <strong>Submitted</strong>. A status changes to Under Review or Resolved only when a local operator updates it; saving or looking up a report does not change its status.</p>

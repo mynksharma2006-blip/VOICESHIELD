@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101a2e">
+    <meta name="description" content="Recent official scam alerts and practical safety tips from trusted public agencies.">
+    <title>Scam News &amp; Safety — VoiceShield</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="shell news-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="VoiceShield AI home">
+          <span class="brand-mark">V</span>
+          <span>VoiceShield <span class="brand-light">AI</span></span>
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/">Audio checker</a>
+          <a href="/scam-news" aria-current="page">Scam News &amp; Safety</a>
+        </nav>
+        <label class="header-language">
+          <span class="sr-only">Display language</span>
+          <select id="news-language-select" aria-label="Display language">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="bn">বাংলা</option>
+            <option value="ta">தமிழ்</option>
+            <option value="te">తెలుగు</option>
+            <option value="mr">मराठी</option>
+          </select>
+        </label>
+      </header>
+
+      <section class="news-intro">
+        <p class="eyebrow">TRUSTED ALERTS · PRACTICAL ADVICE</p>
+        <h1>Scam News <span>&amp; Safety</span></h1>
+        <p class="intro-copy">Browse recent scam-related updates from official public sources. Always open the original report for full details.</p>
+      </section>
+
+      <section class="panel news-panel" aria-labelledby="news-heading">
+        <div class="news-controls">
+          <div>
+            <span class="feature-eyebrow">OFFICIAL SOURCE UPDATES</span>
+            <h2 id="news-heading">Recent alerts and news</h2>
+          </div>
+          <label class="country-control" for="news-country">
+            <span>Your country</span>
+            <select id="news-country" name="country" autocomplete="country">
+              <option value="">Loading countries…</option>
+            </select>
+          </label>
+        </div>
+        <p id="news-source" class="news-source"></p>
+        <p id="news-updated" class="news-updated" aria-live="polite">Checking the official news feed…</p>
+        <p class="news-updated">The news headline and summary remain in the original source language.</p>
+        <div id="news-message" class="news-message" role="status" aria-live="polite">Loading official alerts…</div>
+        <div id="news-items" class="news-items" aria-live="polite"></div>
+        <button id="news-refresh" class="stream-button news-refresh" type="button">Refresh news</button>
+      </section>
+
+      <section class="panel safety-panel" aria-labelledby="safety-heading">
+        <span class="feature-eyebrow">PAUSE · CHECK · PROTECT</span>
+        <h2 id="safety-heading">How to stay safe</h2>
+        <ul class="safety-tips">
+          <li><strong>Keep secrets secret.</strong> Never share passwords, one-time codes, PINs, or recovery phrases with someone who contacted you.</li>
+          <li><strong>Don’t rush or click.</strong> Avoid unexpected links and attachments. Visit the company’s official app or type its known website address yourself.</li>
+          <li><strong>Verify urgent requests independently.</strong> Hang up and contact the person or organization using a phone number you already trust—not one supplied in the message or call.</li>
+          <li><strong>Pause before paying.</strong> Be cautious about urgent requests for gift cards, cryptocurrency, wire transfers, or secrecy.</li>
+        </ul>
+        <p class="safety-note">Scams change quickly. Alerts are informational; verify advice with the linked official agency.</p>
+      </section>
+
+      <footer>
+        <span>VOICESHIELD · STAY INFORMED</span>
+        <a href="/">Back to audio checker</a>
+      </footer>
+    </main>
+    <script src="/static/i18n.js" defer></script>
+    <script src="/static/news.js" defer></script>
+  </body>
+</html>

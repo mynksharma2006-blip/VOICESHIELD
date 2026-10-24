@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101a2e">
+    <title>VoiceShield AI — audio screening</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="VoiceShield AI home">
+          <span class="brand-mark">V</span>
+          <span>VoiceShield <span class="brand-light">AI</span></span>
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/scam-news">Scam News &amp; Safety</a>
+        </nav>
+        <div class="header-badges">
+          <label class="header-language">
+            <span class="sr-only">Display language</span>
+            <select id="language-select" aria-label="Display language">
+              <option value="en">English</option>
+              <option value="hi">हिन्दी</option>
+              <option value="bn">বাংলা</option>
+              <option value="ta">தமிழ்</option>
+              <option value="te">తెలుగు</option>
+              <option value="mr">मराठी</option>
+            </select>
+          </label>
+          <a class="call-status-badge" href="#call-screening" aria-label="Call detection is off in this web app. View call screening details.">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7.1 3.8 9.7 7l-1.6 2a14 14 0 0 0 6.9 6.9l2-1.6 3.2 2.6-.8 3.3a1.8 1.8 0 0 1-2 1.3C9.3 20.3 3.7 14.7 2.5 6.6a1.8 1.8 0 0 1 1.3-2z"/>
+            </svg>
+            <span>CALL DETECTION OFF</span>
+          </a>
+          <span class="local-badge"><span></span> LOCAL PROCESSING</span>
+        </div>
+      </header>
+
+      <nav class="app-nav" aria-label="VoiceShield sections">
+        <button type="button" class="app-nav-link is-active" data-screen="home-view" aria-current="page">Home</button>
+        <button type="button" class="app-nav-link" data-screen="check-view">Voice check</button>
+        <button type="button" class="app-nav-link" data-screen="history-view">Alert history</button>
+        <a class="app-nav-link" href="/scam-news">Scam news</a>
+        <button type="button" class="app-nav-link" data-screen="report-view">Report Cyber Fraud</button>
+        <button type="button" class="app-nav-link" data-screen="settings-view">Privacy &amp; settings</button>
+      </nav>
+
+      <section class="app-view dashboard-view" id="home-view" aria-labelledby="home-title">
+        <div class="dashboard-welcome">
+          <div>
+            <p class="eyebrow">A CALMER WAY TO CHECK</p>
+            <h1 id="home-title">Pause. Check.<br><span>Then decide.</span></h1>
+            <p class="intro-copy">A voice can sound familiar. Take a moment to verify urgent requests before you act.</p>
+          </div>
+          <div class="protection-card">
+            <span class="protection-symbol" aria-hidden="true">✓</span>
+            <div>
+              <span class="feature-eyebrow">VOICE RECORDING CHECKS</span>
+              <strong id="protection-availability">Checking…</strong>
+              <span id="protection-details">Connecting to the local detection service</span>
+            </div>
+            <span class="status-chip status-ready" id="protection-chip">CHECKING</span>
+          </div>
+          <p class="protection-disclaimer">Live cellular-call voice monitoring is <strong>not connected</strong>. Android number warnings are separate and do not analyze call audio.</p>
+        </div>
+        <div class="dashboard-actions">
+          <button class="primary-action" type="button" data-open-screen="check-view">Check a voice recording <span aria-hidden="true">→</span></button>
+          <a class="secondary-action" href="/scam-news">Browse scam news &amp; safety</a>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel dashboard-panel" aria-labelledby="recent-alerts-title">
+            <div class="dashboard-panel-heading">
+              <div><span class="feature-eyebrow">ON THIS BROWSER</span><h2 id="recent-alerts-title">Recent alerts</h2></div>
+              <button class="text-button" type="button" data-open-screen="history-view">View history</button>
+            </div>
+            <div id="dashboard-alerts" class="dashboard-alerts" aria-live="polite">
+              <p class="empty-copy">Your recent voice-check alerts will appear here. Audio checks are not saved as recordings.</p>
+            </div>
+          </section>
+          <aside class="panel dashboard-panel privacy-summary">
+            <span class="feature-eyebrow">YOUR PRIVACY</span>
+            <h2>Audio stays out of history</h2>
+            <p>Recordings are sent to the local VoiceShield server for analysis and are not saved by it. This browser can keep check results only; you can clear them any time.</p>
+            <button class="text-button" type="button" data-open-screen="settings-view">Review privacy settings →</button>
+          </aside>
+        </div>
+        <section class="urgent-safety">
+          <span class="urgent-icon" aria-hidden="true">!</span>
+          <p><strong>Someone asking for money or a code?</strong> Hang up and verify through a number you already trust. A voice check is a warning, never proof.</p>
+        </section>
+      </section>
+
+      <section class="app-view" id="check-view" aria-label="Voice check" hidden>
+      <section class="intro">
+        <p class="eyebrow">A FIRST-PASS AUTHENTICITY CHECK</p>
+        <h1>A voice can sound familiar.<br><span>That isn’t proof.</span></h1>
+        <p class="intro-copy">Screen a short audio clip for signs that it may be synthetic. Your recording is processed on this device’s local server and is not saved.</p>
+      </section>
+
+      <section class="workspace" aria-label="Audio analysis">
+        <div class="panel upload-panel">
+          <div class="panel-heading">
+            <div><span class="step">01</span><h2>Choose a recording</h2></div>
+            <span class="format-label">2–10 SECONDS</span>
+          </div>
+          <label class="dropzone" id="dropzone" for="audio-file">
+            <span class="upload-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 15v4h14v-4"/></svg>
+            </span>
+            <strong>Drop an audio clip here</strong>
+            <span class="drop-subtitle">or <span class="browse">browse files</span></span>
+            <span class="file-types">WAV, FLAC, or OGG · up to 20 MB</span>
+            <input id="audio-file" type="file" accept="audio/wav,audio/x-wav,audio/flac,audio/x-flac,audio/ogg,.wav,.flac,.ogg">
+          </label>
+          <div class="record-controls">
+            <button class="secondary-action" id="record-start" type="button">Record a short clip</button>
+            <button class="secondary-action" id="record-stop" type="button" hidden>Stop recording</button>
+            <span id="record-status" class="record-status" aria-live="polite">Recording needs microphone permission and a secure connection.</span>
+          </div>
+          <div class="selected-file" id="selected-file" hidden>
+            <div class="file-icon">♫</div>
+            <div class="file-meta"><strong id="file-name"></strong><span id="file-size"></span><span id="clip-length">Duration shown after audio loads</span></div>
+            <button class="text-button" id="remove-file" type="button">Delete &amp; reset</button>
+          </div>
+          <div class="demo-examples">
+            <span class="demo-heading">ONE-TAP DEMO <i>permitted clips only</i></span>
+            <div class="demo-buttons">
+              <button type="button" class="demo-button" data-example="genuine" disabled>Genuine example</button>
+              <button type="button" class="demo-button" data-example="synthetic" disabled>Synthetic example</button>
+            </div>
+            <span class="demo-note" id="demo-note">Add permitted WAVs in backend/data/demo/ to enable examples.</span>
+          </div>
+          <div class="stream-demo">
+            <button class="stream-button" id="stream-start" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v11m5-6a5 5 0 0 1-10 0M5 11a7 7 0 0 0 14 0m-7 7v4m-4 0h8"/></svg>
+              <span>Try 500 ms live mic demo</span>
+            </button>
+            <button class="stream-button stream-stop" id="stream-stop" type="button" hidden>Stop mic demo</button>
+            <p class="stream-status" id="stream-status" aria-live="polite">Live mic demo only — does not listen to phone calls.</p>
+            <section class="live-score-chart" id="live-score-chart" aria-labelledby="live-score-title" hidden>
+              <div class="live-score-heading">
+                <div>
+                  <strong id="live-score-title">Live score trend</strong>
+                  <span>Raw model score · not a probability</span>
+                </div>
+                <div class="live-score-meta">
+                  <div class="live-score-indicator" id="live-score-indicator">
+                    <span class="live-score-indicator-dot" aria-hidden="true"></span>
+                    <span id="live-score-state">MIC STARTING</span>
+                  </div>
+                  <output id="live-score-value" aria-live="polite">Waiting for the first score</output>
+                </div>
+              </div>
+              <div class="live-waveform-wrap">
+                <div class="live-waveform-label"><span>LIVE MICROPHONE WAVEFORM</span><span>Audio level · auto-scaled</span></div>
+                <svg
+                  class="live-waveform"
+                  id="live-waveform"
+                  viewBox="0 0 320 72"
+                  role="img"
+                  aria-label="Live microphone waveform. Waiting for microphone audio."
+                >
+                  <path class="live-waveform-midline" d="M0 36H320"></path>
+                  <path class="live-waveform-line" id="live-waveform-line" d=""></path>
+                </svg>
+              </div>
+              <svg
+                class="live-score-plot"
+                id="live-score-plot"
+                viewBox="0 0 320 120"
+                role="img"
+                aria-label="Live raw model score trend. No scores yet."
+              >
+                <path class="live-score-grid" d="M0 24H320 M0 60H320 M0 96H320"></path>
+                <path class="live-score-zero" d="M0 60H320"></path>
+                <polyline class="live-score-line" id="live-score-line" points=""></polyline>
+                <circle class="live-score-dot" id="live-score-dot" cx="0" cy="60" r="4"></circle>
+              </svg>
+              <div class="live-score-axis" aria-hidden="true">
+                <span>Lower raw score</span>
+                <span>Higher raw score</span>
+              </div>
+              <p>Waveform follows microphone input; score points update every 500 ms from a rolling 4.04-second window. This is not phone-call audio.</p>
+            </section>
+          </div>
+          <audio id="audio-player" controls hidden></audio>
+          <button class="analyze-button" id="analyze" type="button" disabled>
+            <span id="button-label">Analyze audio</span><span aria-hidden="true">→</span>
+          </button>
+          <p class="privacy"><span aria-hidden="true">◈</span> Processed locally · Not stored · No account required</p>
+        </div>
+
+        <div class="panel result-panel" aria-live="polite">
+          <div class="panel-heading">
+            <div><span class="step">02</span><h2>Screening result</h2></div>
+            <span class="idle-dot" id="status-dot"></span>
+          </div>
+          <div class="empty-state" id="empty-state">
+            <div class="sound-graphic" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <p>Your result will appear here</p>
+            <span>Choose a clip to begin analysis</span>
+          </div>
+          <div class="result-content" id="result-content" hidden>
+            <div class="result-label" id="result-label"></div>
+            <p class="result-reason" id="result-reason"></p>
+            <div class="risk-graph" id="risk-graph" hidden>
+              <div class="risk-graph-heading">
+                <span>MODEL SCREENING SIGNAL</span>
+                <span>Not a probability</span>
+              </div>
+              <div
+                class="risk-scale"
+                id="risk-scale"
+                role="img"
+                aria-label="Model screening signal"
+              >
+                <span class="risk-zone risk-zone-genuine"></span>
+                <span class="risk-zone risk-zone-inconclusive"></span>
+                <span class="risk-zone risk-zone-suspicious"></span>
+                <span class="risk-marker"></span>
+              </div>
+              <div class="risk-scale-labels" aria-hidden="true">
+                <span>Likely genuine</span>
+                <span>Inconclusive</span>
+                <span>Suspicious</span>
+              </div>
+            </div>
+            <div class="result-details">
+              <div class="risk-percentage-row">
+                <span>RISK PERCENTAGE</span>
+                <strong id="risk-percentage">Not available</strong>
+              </div>
+              <div><span>CLIP DURATION</span><strong id="duration"></strong></div>
+              <div><span>MODEL</span><strong id="model"></strong></div>
+              <div id="score-row" hidden><span>RAW DECISION SCORE <i>(not a probability)</i></span><strong id="score"></strong></div>
+            </div>
+            <p class="risk-percentage-note" id="risk-percentage-note">
+              A percentage is not shown because this model’s raw score has not been calibrated as a probability.
+            </p>
+            <div class="warning-box" id="warning-box" hidden><strong>Audio quality note</strong><ul id="warnings"></ul></div>
+            <section class="high-risk-alert" id="high-risk-alert" aria-live="assertive" hidden>
+              <div class="high-risk-title"><span aria-hidden="true">!</span><div><span class="feature-eyebrow">PAUSE BEFORE YOU ACT</span><h3>Suspicious voice signal</h3></div></div>
+              <p>This result is a warning, not proof of who is speaking. The model has not been validated on recordings like yours, so a familiar genuine voice can be flagged by mistake. Do not send money or share confidential information based on this call.</p>
+              <ol>
+                <li>Hang up and take a moment.</li>
+                <li>Call back using a number you already trust.</li>
+                <li>Verify the request with another person if you can.</li>
+              </ol>
+              <p class="high-risk-footnote">VoiceShield will not block the caller or make a payment for you.</p>
+            </section>
+          </div>
+          <p class="limitation" id="limitation">This tool can make mistakes and cannot verify identity. If a request feels urgent, contact the person through a number you already trust.</p>
+        </div>
+      </section>
+      <section class="panel call-screening-panel" id="call-screening" aria-labelledby="call-screening-title">
+        <div class="call-screening-heading">
+          <div class="call-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M7.1 3.8 9.7 7l-1.6 2a14 14 0 0 0 6.9 6.9l2-1.6 3.2 2.6-.8 3.3a1.8 1.8 0 0 1-2 1.3C9.3 20.3 3.7 14.7 2.5 6.6a1.8 1.8 0 0 1 1.3-2z"/>
+            </svg>
+            <span class="call-icon-status" aria-hidden="true"></span>
+          </div>
+          <div>
+            <span class="feature-eyebrow">INCOMING CALLS</span>
+            <h2 id="call-screening-title">Call detection</h2>
+          </div>
+          <span class="call-state">NOT ACTIVE</span>
+        </div>
+        <p class="feature-copy">Call detection is <strong>not active in this website</strong>. The Android app is built and ready to install; incoming calls are screened only after you install it on your phone and approve Android’s call-screening role.</p>
+        <a class="call-download" href="/api/mobile/android.apk" download>Download Android call-screening app <span aria-hidden="true">↓</span></a>
+        <p class="call-install-hint">Download the APK on your computer, transfer it to an Android phone, install it, then open <strong>VoiceShield Calls</strong> and enable call warnings.</p>
+        <div class="call-demo-test">
+          <button class="secondary-action" id="call-stream-test" type="button">Run backend stream test</button>
+          <p class="call-install-hint">Sends a simulated PCM chunk to this app’s backend stream pipeline using a dummy detector. It checks backend connectivity and stream handling—not your phone, configured model, secure WSS setup, or a live call.</p>
+          <p id="call-stream-test-status" class="call-test-status" role="status" aria-live="polite">Test has not been run.</p>
+        </div>
+        <div class="call-platforms">
+          <div>
+            <strong>Android</strong>
+            <span>The installable app warns when a number is not in contacts. It cannot tell whether the caller is fraudulent.</span>
+          </div>
+          <div>
+            <strong>iPhone</strong>
+            <span>iOS source can identify only spam numbers you add to its local list. It still needs to be built on a Mac; iOS does not allow screening all unknown calls.</span>
+          </div>
+        </div>
+        <p class="call-audio-limit">The live mic demo above is not a phone-call feed. Neither the web app nor the native call-warning app analyzes cellular-call audio or detects cloned voices.</p>
+        <details class="call-setup">
+          <summary>Why don’t I see call detection working?</summary>
+          <p>The mobile code is only a starter prototype in the project’s <code>mobile</code> folder. No phone app has been installed or enabled. Android setup requires building and installing the app; iPhone setup requires Xcode on a Mac and enabling the Call Directory extension. This computer’s web page cannot monitor your phone calls.</p>
+        </details>
+      </section>
+      <section class="feature-grid">
+        <article class="panel feature-card">
+          <span class="feature-eyebrow">IF SOMETHING FEELS OFF</span>
+          <h2>Call safety checklist</h2>
+          <ol class="safety-list">
+            <li><span>1</span>Hang up and pause before acting.</li>
+            <li><span>2</span>Call back using a number you already trust.</li>
+            <li><span>3</span>Never share money or verification codes based on a voice call alone.</li>
+          </ol>
+        </article>
+        <article class="panel feature-card">
+          <span class="feature-eyebrow">WHAT THIS CHECKS</span>
+          <h2>A signal, not an identity</h2>
+          <p class="feature-copy">AASIST screens for audio patterns associated with synthetic speech. It was pretrained on ASVspoof 2019 Logical Access data; noise, language, recording devices, and unfamiliar generators can affect the result.</p>
+          <p class="feature-copy strong-copy">It does not identify a speaker, verify a voice, or prove authenticity.</p>
+        </article>
+      </section>
+      <section class="panel performance-panel" id="performance">
+        <div class="performance-heading">
+          <div><span class="feature-eyebrow">TRANSPARENCY</span><h2>Model performance</h2></div>
+          <button class="text-button refresh-button" id="refresh-performance" type="button">Refresh report</button>
+        </div>
+        <p class="performance-message" id="performance-message">Checking for a local evaluation report…</p>
+        <p class="performance-model" id="performance-model" hidden></p>
+        <a class="download-report" id="download-report" href="/api/performance/download" hidden download>Download evaluation report</a>
+        <div class="table-scroll">
+          <table id="performance-table" hidden>
+            <thead><tr><th>Source</th><th>Partition</th><th>Condition</th><th>Clips</th><th>Balanced accuracy</th><th>EER</th><th>False positives</th><th>False negatives</th></tr></thead>
+            <tbody id="performance-rows"></tbody>
+          </table>
+        </div>
+        <p class="performance-footnote">ASVspoof and In-the-Wild appear as separate sources. Only locally measured results are shown; no benchmark or real-world performance is implied.</p>
+      </section>
+      <p class="privacy-note">Privacy: uploaded recordings are analyzed in memory and not saved by the server. Use Delete &amp; reset to clear the selected clip and playback from this page.</p>
+      </section>
+
+      <section class="app-view" id="history-view" aria-labelledby="history-title" hidden>
+        <div class="page-heading">
+          <p class="eyebrow">STORED ONLY IN THIS BROWSER</p>
+          <h1 id="history-title">Alert history</h1>
+          <p class="intro-copy">Your saved results and safety alerts. Audio recordings are never included.</p>
+        </div>
+        <section class="panel history-panel">
+          <div class="dashboard-panel-heading">
+            <div><span class="feature-eyebrow">PRIVATE TO THIS DEVICE</span><h2>Recent voice checks</h2></div>
+            <button class="text-button danger-text" id="clear-history" type="button">Clear history</button>
+          </div>
+          <div id="history-list" class="history-list" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <section class="app-view" id="report-view" aria-labelledby="report-title" hidden>
+        <div class="page-heading">
+          <p class="eyebrow">PRIVATE IN-APP REPORT</p>
+          <h1 id="report-title">Report Cyber Fraud</h1>
+          <p class="intro-copy">Record what happened and keep a local reference. This does not file an official police or government complaint.</p>
+        </div>
+        <section class="report-notice" aria-labelledby="report-privacy-title">
+          <h2 id="report-privacy-title">Before you continue</h2>
+          <p>VoiceShield saves your report and optional evidence in a private local file on the computer running the backend. It is not sent to police, a government agency, or another service. After a successful save, you receive a one-time private access key. Keep it safe with your reference number: anyone with both can view the report status and details. The key is not recoverable. Anyone with access to the backend computer or its files may access stored reports; do not include passwords, verification codes, or unrelated sensitive information.</p>
+          <p><strong>This is not an official complaint.</strong> Use the country-specific official service below to make a report to the appropriate authority.</p>
+        </section>
+        <section class="report-official panel" aria-labelledby="official-report-title">
+          <div class="report-country-row">
+            <div>
+              <span class="feature-eyebrow">OFFICIAL REPORTING SERVICE</span>
+              <h2 id="official-report-title">Contact the right service for your country</h2>
+            </div>
+            <label class="report-field report-country-field" for="report-country">
+              <span>Your country <b>(required)</b></span>
+              <select id="report-country" name="country" required>
+                <option value="IN" selected>India</option>
+                <option value="AU">Australia</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+                <option value="US">United States</option>
+              </select>
+            </label>
+          </div>
+          <p id="official-report-guidance" class="report-guidance" aria-live="polite">Loading the official reporting service…</p>
+          <a id="official-report-link" class="report-official-link" href="https://cybercrime.gov.in/" target="_blank" rel="noopener noreferrer">Open official reporting service ↗</a>
+          <p class="report-external-note">This link opens an external official site. VoiceShield does not transmit your in-app report there.</p>
+        </section>
+        <section class="panel report-form-panel" aria-labelledby="report-form-title">
+          <h2 id="report-form-title">Incident details</h2>
+          <p class="report-required-note">Fields marked required must be completed. Provide your name and at least one safe contact method so you can refer back to this in-app report.</p>
+          <form id="cyber-report-form" novalidate>
+            <div class="report-form-grid">
+              <label class="report-field" for="incident-type">
+                <span>Incident type <b>(required)</b></span>
+                <select id="incident-type" name="incident_type" required>
+                  <option value="">Choose an incident type</option>
+                  <option value="voice_phone">Voice or phone scam</option>
+                  <option value="impersonation">Impersonation</option>
+                  <option value="phishing">Phishing message, email, or website</option>
+                  <option value="payment_fraud">Payment fraud</option>
+                  <option value="other">Other cyber fraud</option>
+                </select>
+              </label>
+              <label class="report-field" for="incident-datetime">
+                <span>Date and approximate time <b>(required)</b></span>
+                <input id="incident-datetime" name="incident_datetime" type="datetime-local" required>
+              </label>
+              <label class="report-field" for="contact-method">
+                <span>How did they contact you? <b>(required)</b></span>
+                <select id="contact-method" name="contact_method" required>
+                  <option value="">Choose a contact method</option>
+                  <option value="phone">Phone or voice call</option>
+                  <option value="email">Email</option>
+                  <option value="website">Website</option>
+                  <option value="social_media">Social media or messaging app</option>
+                  <option value="in_person">In person</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label class="report-field" for="involved-contact">
+                <span>Phone, email, website, or account involved <i>(optional)</i></span>
+                <input id="involved-contact" name="involved_contact" type="text" maxlength="320" autocomplete="off">
+              </label>
+              <div class="report-field report-amount-group">
+                <label for="amount-lost"><span>Amount lost <i>(optional)</i></span></label>
+                <div class="report-amount-controls">
+                  <input id="amount-lost" name="amount_lost" type="number" min="0" max="999999999999.99" step="0.01" inputmode="decimal" placeholder="0.00">
+                  <label class="sr-only" for="report-currency">Currency</label>
+                  <select id="report-currency" name="currency" aria-label="Currency">
+                    <option value="INR" selected>INR ₹</option>
+                    <option value="AUD">AUD $</option>
+                    <option value="CAD">CAD $</option>
+                    <option value="GBP">GBP £</option>
+                    <option value="USD">USD $</option>
+                  </select>
+                </div>
+                <small>Leave the amount blank if no money was lost or you are unsure.</small>
+              </div>
+              <label class="report-field report-description-field" for="incident-description">
+                <span>What happened? <b>(required)</b></span>
+                <textarea id="incident-description" name="description" rows="6" minlength="20" maxlength="5000" required aria-describedby="description-help"></textarea>
+                <small id="description-help">Include relevant details in your own words. Do not include passwords or one-time codes. 20–5,000 characters.</small>
+              </label>
+            </div>
+            <fieldset class="report-evidence">
+              <legend>Evidence <i>(optional)</i></legend>
+              <p class="evidence-checklist">Before submitting, consider keeping original screenshots, messages, transaction IDs, payment receipts, and the dates and times involved. Only attach evidence relevant to this incident; uploading is optional.</p>
+              <label class="report-field" for="report-evidence">
+                <span>Attach one evidence file</span>
+                <input id="report-evidence" name="evidence" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,application/pdf,image/png,image/jpeg,text/plain" aria-describedby="evidence-help">
+                <small id="evidence-help">Allowed: PDF, PNG, JPEG, or UTF-8 TXT. Maximum 5 MB. Evidence is stored privately on this computer and is not shown publicly or sent to an authority.</small>
+              </label>
+              <p id="evidence-file-name" class="evidence-file-name" aria-live="polite">No evidence file selected.</p>
+            </fieldset>
+            <fieldset class="report-follow-up">
+              <legend>Safe follow-up contact</legend>
+              <p>Your name is required. Provide at least one safe follow-up method: email, phone, or an opted-in callback request. These details are stored with your private in-app report and are not displayed on any public page.</p>
+              <div class="report-form-grid">
+                <label class="report-field" for="reporter-name">
+                  <span>Your name <b>(required)</b></span>
+                  <input id="reporter-name" name="reporter_name" type="text" maxlength="120" autocomplete="name" required>
+                </label>
+                <label class="report-field" for="contact-email">
+                  <span>Email <i>(one safe contact is required)</i></span>
+                  <input id="contact-email" name="contact_email" type="email" maxlength="254" autocomplete="email">
+                </label>
+                <label class="report-field" for="contact-phone">
+                  <span>Phone <i>(one safe contact is required)</i></span>
+                  <input id="contact-phone" name="contact_phone" type="tel" maxlength="40" autocomplete="tel">
+                </label>
+              </div>
+              <fieldset class="callback-request">
+                <legend>Request a Callback <i>(optional)</i></legend>
+                <label class="report-checkbox" for="callback-requested">
+                  <input id="callback-requested" name="callback_requested" type="checkbox" value="true">
+                  <span>Include an optional callback request with this report.</span>
+                </label>
+                <div id="callback-fields" class="report-form-grid" hidden>
+                  <label class="report-field" for="callback-phone">
+                    <span>Callback phone number <b>(required for callback request)</b></span>
+                    <input id="callback-phone" name="callback_phone" type="tel" maxlength="40" autocomplete="tel">
+                  </label>
+                  <label class="report-field" for="callback-preferred-time">
+                    <span>Preferred contact time <b>(required for callback request)</b></span>
+                    <input id="callback-preferred-time" name="callback_preferred_time" type="datetime-local">
+                    <small>Choose a future time. VoiceShield saves the time with your device’s UTC offset.</small>
+                  </label>
+                  <input id="callback-timezone-offset" name="callback_timezone_offset_minutes" type="hidden">
+                  <label class="report-checkbox callback-consent" for="callback-consent">
+                    <input id="callback-consent" name="callback_consent" type="checkbox" value="true">
+                    <span>I consent to a team member contacting me by phone about this report. This request and my number will be stored with the report for possible follow-up. No call is placed now, callback follow-up is not connected, and a callback is not guaranteed. <b>(required to request a callback)</b></span>
+                  </label>
+                </div>
+                <p class="call-audio-limit">A callback is optional. You can submit a report without requesting one; your existing email or phone is still used for report follow-up.</p>
+              </fieldset>
+            </fieldset>
+            <fieldset class="report-consent">
+              <legend>Confirm before submission</legend>
+              <label class="report-checkbox">
+                <input name="confirm_accuracy" type="checkbox" value="true" required>
+                <span>I confirm that the information I provided is accurate to the best of my knowledge. <b>(required)</b></span>
+              </label>
+              <label class="report-checkbox">
+                <input name="consent_to_store" type="checkbox" value="true" required>
+                <span>I consent to VoiceShield saving this information and any selected evidence in a private local file on the computer running the backend as an in-app report. I understand it will not be submitted to an authority. <b>(required)</b></span>
+              </label>
+            </fieldset>
+            <input id="report-country-value" name="country" type="hidden" value="IN">
+            <div class="report-actions">
+              <button class="primary-action" id="submit-cyber-report" type="submit">Save in-app report</button>
+              <p id="cyber-report-status" class="report-status" role="status" aria-live="polite"></p>
+            </div>
+            <section id="cyber-report-success" class="report-success" role="status" aria-live="polite" hidden>
+              <h3>In-app report saved</h3>
+              <p id="cyber-report-success-message"></p>
+              <p>Complaint reference: <strong id="cyber-report-reference"></strong> · Status: <strong id="cyber-report-submitted-status">Submitted</strong></p>
+              <p>Your private access key is shown once. Save it with the reference; it cannot be recovered.</p>
+              <p><code id="cyber-report-access-key"></code> <button class="text-button" id="copy-report-access-key" type="button">Copy private access key</button></p>
+              <p id="cyber-report-callback-status"></p>
+              <p>This reference confirms local saving only. Your report was not filed with law enforcement or a government agency.</p>
+              <h4>Suggested next steps</h4>
+              <ul id="cyber-report-next-steps"></ul>
+            </section>
+          </form>
+        </section>
+        <section class="panel report-history-panel" aria-labelledby="report-history-title">
+          <h2 id="report-history-title">Check a private report</h2>
+          <p>Enter the complaint reference and one-time private access key. The reference alone cannot open a report. Do not share the access key.</p>
+          <p>Every report starts as <strong>Submitted</strong>. A status changes to Under Review or Resolved only when a local operator updates it; saving or looking up a report does not change its status.</p>
+          <form id="report-history-form" class="report-form-grid">
+            <label class="report-field" for="report-history-reference">
+              <span>Complaint reference</span>
+              <input id="report-history-reference" name="reference" type="text" minlength="15" maxlength="40" pattern="VS-[A-Fa-f0-9]+" autocomplete="off" required>
+            </label>
+            <label class="report-field" for="report-history-key">
+              <span>Private access key</span>
+              <input id="report-history-key" name="access_key" type="password" minlength="40" maxlength="100" autocomplete="off" required>
+            </label>
+            <button class="secondary-action" id="lookup-private-report" type="submit">Look up report status</button>
+          </form>
+          <p id="report-history-status" class="report-status" role="status" aria-live="polite"></p>
+          <article id="private-report-result" class="private-report-result" aria-live="polite" hidden>
+            <h3>Complaint <span id="private-report-reference"></span></h3>
+            <p>Current status: <strong id="private-report-status"></strong></p>
+            <p id="private-report-submitted"></p>
+            <p id="private-report-summary"></p>
+            <p id="private-report-amount"></p>
+            <p id="private-report-evidence"></p>
+            <p id="private-report-callback"></p>
+            <h4>Suggested next steps</h4>
+            <ul id="private-report-next-steps"></ul>
+          </article>
+        </section>
+      </section>
+
+      <section class="app-view" id="settings-view" aria-labelledby="settings-title" hidden>
+        <div class="page-heading">
+          <p class="eyebrow">CLEAR, HONEST CONTROLS</p>
+          <h1 id="settings-title">Privacy &amp; settings</h1>
+          <p class="intro-copy">See what this version does—and what it does not do.</p>
+        </div>
+        <section class="panel settings-panel">
+          <div class="settings-row">
+            <div><h2>Audio processing</h2><p>Uploads are analyzed by the local VoiceShield server in memory. This setting is always on; there is no cloud analysis option.</p></div>
+            <span class="status-chip status-ready">LOCAL</span>
+          </div>
+          <div class="settings-row">
+            <div><h2>Recording storage</h2><p>Audio is not saved by the server or included in browser history.</p></div>
+            <span class="status-chip status-ready">NOT SAVED</span>
+          </div>
+          <p class="settings-storage-message" id="history-storage-message" aria-live="polite">Results are saved in this browser only. Audio is not included.</p>
+          <div class="settings-row">
+            <div><h2>Save check history</h2><p>Keep result labels, dates, and short explanations in this browser only. No audio is stored.</p></div>
+            <label class="toggle-control"><span class="sr-only">Save check history in this browser</span><input id="history-setting" type="checkbox"><span class="toggle-track" aria-hidden="true"></span></label>
+          </div>
+          <div class="settings-row">
+            <div><h2>Language</h2><p>Choose the language used for VoiceShield screens and controls.</p></div>
+            <label class="settings-language" for="settings-language"><span class="sr-only">Language</span>
+              <select id="settings-language" aria-label="Language">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="bn">বাংলা</option>
+                <option value="ta">தமிழ்</option>
+                <option value="te">తెలుగు</option>
+                <option value="mr">मराठी</option>
+              </select>
+            </label>
+          </div>
+          <div class="settings-row">
+            <div><h2>Android incoming-call alerts</h2><p>The optional Android app can warn when an incoming number is not in your contacts after you install it and grant its call-screening role. It checks contacts on your phone only; it does not analyze call audio or determine whether a caller is fraudulent.</p></div>
+            <a class="status-chip status-demo" href="#call-screening">SETUP</a>
+          </div>
+          <div class="settings-row">
+            <div><h2>Results are not certainty</h2><p>The model score is not a calibrated probability, does not identify a speaker, and can miss synthetic or cloned speech.</p></div>
+            <span class="status-chip status-demo">CAUTION</span>
+          </div>
+        </section>
+      </section>
+      <footer><span>VOICESHIELD AI</span><span>DEMO SCREENING TOOL · NOT IDENTITY VERIFICATION</span></footer>
+    </main>
+    <script src="/static/i18n.js" defer></script>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

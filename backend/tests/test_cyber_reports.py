@@ -179,7 +179,7 @@ class CyberReportTests(unittest.TestCase):
             "app.api.asyncio.to_thread",
             new_callable=AsyncMock,
             return_value=("VS-TEST1234567890ABCDEF", "test-private-key"),
-        ):
+        ), patch("app.api.PRIVATE_REPORTS_ENABLED", True):
             result = asyncio.run(
                 api.submit_cyber_fraud_report(
                     country="IN",
@@ -211,6 +211,41 @@ class CyberReportTests(unittest.TestCase):
         self.assertTrue(result["callback_request_saved"])
         self.assertIn("No call was placed", result["callback_message"])
         self.assertIn("not guaranteed", result["callback_message"])
+
+    def test_public_mode_disables_private_report_submission_and_lookup(self) -> None:
+        with patch("app.api.PRIVATE_REPORTS_ENABLED", False):
+            with self.assertRaises(api.HTTPException) as submit_error:
+                asyncio.run(
+                    api.submit_cyber_fraud_report(
+                        country="IN",
+                        incident_type="voice_phone",
+                        incident_datetime=(datetime.now() - timedelta(days=1)).isoformat(timespec="minutes"),
+                        contact_method="phone",
+                        involved_contact=None,
+                        amount_lost=None,
+                        currency="INR",
+                        description="A caller impersonated my bank and requested a transfer.",
+                        reporter_name="Test User",
+                        contact_email="person@example.com",
+                        contact_phone=None,
+                        callback_requested=False,
+                        callback_phone=None,
+                        callback_preferred_time=None,
+                        callback_timezone_offset_minutes=None,
+                        callback_consent=False,
+                        confirm_accuracy=True,
+                        consent_to_store=True,
+                        evidence=None,
+                    )
+                )
+            with self.assertRaises(api.HTTPException) as lookup_error:
+                api.private_report_history(
+                    ReportAccessRequest(reference="VS-ABCDEF1234567890ABCD", access_key="x" * 43),
+                    api.Response(),
+                )
+
+        self.assertEqual(submit_error.exception.status_code, 503)
+        self.assertEqual(lookup_error.exception.status_code, 503)
 
     def test_status_updates_preserve_legacy_records_and_reject_invalid_status(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -279,6 +279,7 @@ async function loadProtectionStatus() {
     const response = await fetch("/api/status", { cache: "no-store" });
     const data = await response.json();
     if (!response.ok) throw new Error(data.detail || "Detection service is unavailable.");
+    setPrivateReportAvailability(data.private_reports_enabled === true);
     availability.textContent =
       data.status !== "ready" ? "Demo only" : data.screening_labels_validated ? "Ready" : "Score only";
     details.textContent = data.model_id
@@ -294,11 +295,28 @@ async function loadProtectionStatus() {
     );
     chip.classList.toggle("status-ready", data.status === "ready" && data.screening_labels_validated);
   } catch {
+    setPrivateReportAvailability(false, "Report intake availability could not be confirmed. Private report intake is disabled for this session.");
     availability.textContent = "Not connected";
     details.textContent = "The local service could not be reached. Try again when it is running.";
     chip.textContent = "OFFLINE";
     chip.classList.remove("status-ready", "status-demo");
     chip.classList.add("status-offline");
+  }
+}
+
+function setPrivateReportAvailability(enabled, message) {
+  document.querySelector("#report-form-panel").hidden = !enabled;
+  document.querySelector("#report-history-panel").hidden = !enabled;
+  document.querySelector("#report-privacy-notice").hidden = !enabled;
+  const notice = document.querySelector("#report-disabled-notice");
+  notice.hidden = enabled;
+  if (!enabled && message) {
+    notice.querySelector("h2").textContent = "Private report intake unavailable";
+    notice.querySelector("p").textContent = message;
+  } else if (!enabled) {
+    notice.querySelector("h2").textContent = "Private report intake is disabled";
+    notice.querySelector("p").textContent =
+      "This public deployment does not store incident reports or evidence. Use the official reporting service below to report an incident.";
   }
 }
 
